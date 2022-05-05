@@ -1,4 +1,4 @@
-
+const choices = ["rock", "paper","scissors"]
 //this function will define the variables and return the computers pick
 function computerPlay(){
     let randomNumber = Math.floor(Math.random() * 3) + 1;
@@ -14,7 +14,12 @@ function computerPlay(){
         return scissors;
     }       
 }
-
+//function to keep user input lowercase
+function playerChoice() {
+    let input = prompt ("Choose rock, paper, or scissors.");
+    input = input.toLowerCase();
+    return input;
+}
 
 function game() {
 
@@ -26,7 +31,7 @@ function game() {
         //placing the parameter definitions here as it was needed to show and test the outcome of console.log 
         //placing it elsewere early in writing the code returned nothing in the console
         const computerSelection = computerPlay();
-        playerSelection = prompt ("Make your choice between Rock, Paper, or Scissors.");
+        const playerSelection = playerChoice();
     
         function playRound(playerSelection, computerSelection) {
 
@@ -37,6 +42,7 @@ function game() {
             let paperBeatsRockPlayerLoss = "You lose, paper beats rock.";
             let scissorsBeatsPaperPlayerWin = "You win! Scissors beats Paper!";
             let scissorsBeatsPaperPlayerLoss = "You lose, Scissors beats Paper.";
+            let incorrectInput = "That is an incorrect guess, try again."
 
             if (playerSelection === computerSelection) {
                 return tie;
@@ -55,9 +61,12 @@ function game() {
             } else if ((playerSelection === 'scissors') && (computerSelection === 'paper')) {
                 playerScore++;
                 return scissorsBeatsPaperPlayerWin;
-            } else {
+            } else if ((playerSelection === 'paper') && (computerSelection === 'scissors')){
                 computerScore++;
                 return scissorsBeatsPaperPlayerLoss;
+            } else {
+                return incorrectInput;
+
             }
 
         }
@@ -77,5 +86,6 @@ function game() {
     console.log(winner)
 
 }  
+
 //needed to actually run the game function
 game()
