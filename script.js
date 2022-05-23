@@ -1,38 +1,42 @@
-const choices = ["rock", "paper","scissors"]
-//this function will define the variables and return the computers pick
+
+
+
+
+//changed randomNumber generator as previous math was generating infinitly
 function computerPlay(){
-    let randomNumber = Math.floor(Math.random() * 3) + 1;
-    let rock = "rock";
-    let paper = "paper";
-    let scissors = "scissors";
-    
-    if (randomNumber === 1) {
-        return rock;    
-    } else if (randomNumber === 2) {
+    let rock = "Rock";
+    let paper = "Paper";
+    let scissors ="Scissors";
+    let randomNumber = Math.random();
+    if (randomNumber <= 0.33) {
+        return rock;
+    }  else if (randomNumber <= 0.66) {
         return paper;
     } else {
         return scissors;
-    }       
-}
-//function to keep user input lowercase
-function playerChoice() {
-    let input = prompt ("Choose rock, paper, or scissors.");
-    input = input.toLowerCase();
-    return input;
+    }
 }
 
 function game() {
+    let playerWin = 0;
+    let computerWin = 0;
+    let gameWinner = "";
 
-    let playerScore = 0;
-    let computerScore = 0;
-    let winner = "";
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach((button) => {
+        button.addEventListener('click', () => {
+            playerSelection = button.className;
+            let computerSelection = computerPlay();
+            battleWinText.textContent = (playRound(playerSelection, computerSelection));
+            playerWinText.textContent = "Your Win Total: " + playerWin;
+            computerWinText.textContent = "Computer Win Total: " + computerWin;
+            endGame();
 
-    for (let i = 0; i < 5; i++){
-        //placing the parameter definitions here as it was needed to show and test the outcome of console.log 
-        //placing it elsewere early in writing the code returned nothing in the console
-        const computerSelection = computerPlay();
-        const playerSelection = playerChoice();
-    
+        })
+    })
+            
+            
+            
         function playRound(playerSelection, computerSelection) {
 
             let tie = "You picked " + playerSelection + " and the computer picked the same! " + "It's a tie.";
@@ -46,46 +50,73 @@ function game() {
 
             if (playerSelection === computerSelection) {
                 return tie;
-            } else if ((playerSelection === 'rock') && (computerSelection === 'scissors')) {
-                playerScore++;
+            } else if ((playerSelection === 'Rock') && (computerSelection === 'Scissors')) {
+                playerWin++;
                 return rockBeatsScissorsPlayerWin;
-            } else if ((playerSelection === 'scissors') && (computerSelection === 'rock')) {
-                computerScore++;
+            } else if ((playerSelection === 'Scissors') && (computerSelection === 'Rock')) {
+                computerWin++;
                 return rockBeatsScissorsPlayerLoss;
-            } else if ((playerSelection === 'paper') && (computerSelection === 'rock')) {
-                playerScore++;
+            } else if ((playerSelection === 'Paper') && (computerSelection === 'Rock')) {
+                playerWin++;
                 return paperBeatsRockPlayerWin;
-            } else if ((playerSelection === 'rock') && (computerSelection === 'paper')) {
-                computerScore++;
+            } else if ((playerSelection === 'Rock') && (computerSelection === 'Paper')) {
+                computerWin++;
                 return paperBeatsRockPlayerLoss;
-            } else if ((playerSelection === 'scissors') && (computerSelection === 'paper')) {
-                playerScore++;
+            } else if ((playerSelection === 'Scissors') && (computerSelection === 'Paper')) {
+                playerWin++;
                 return scissorsBeatsPaperPlayerWin;
-            } else if ((playerSelection === 'paper') && (computerSelection === 'scissors')){
-                computerScore++;
+            } else if ((playerSelection === 'Paper') && (computerSelection === 'Scissors')){
+                computerWin++;
                 return scissorsBeatsPaperPlayerLoss;
-            } else {
-                return incorrectInput;
-
-            }
+            } 
 
         }
-        console.log(playRound(playerSelection, computerSelection));
+    
+
+    const container = document.querySelector("#container");
+    const resultsDiv = document.createElement("div");
+    resultsDiv.style.marginTop = "20px";
+    container.appendChild(resultsDiv);
+            
+    const playerWinText = document.createElement("p");
+    playerWinText.style.color = "orange";
+    playerWinText.textContent = "Your Win Total: " + playerWin;
+    resultsDiv.appendChild(playerWinText);
+            
+    const computerWinText = document.createElement("p");
+    computerWinText.style.color = "green";
+    computerWinText.textContent = "Computer Win Total: " + computerWin;
+    resultsDiv.appendChild(computerWinText);
+            
+    const battleWinText = document.createElement("p");
+    battleWinText.style.color = "purple";
+    resultsDiv.appendChild(battleWinText);
+            
+    const gameWinText = document.createElement("p");
+    gameWinText.style.color = "blue";
+    gameWinText.textContent = gameWinner;
+    resultsDiv.appendChild(gameWinText);
+
+    function endGame() {
+        if (playerWin == 5) {
+            gameWinner = "Congrats! You've won!";
+            gameWinText.textContent = gameWinner;
+        } else if (computerWin == 5) {
+            gameWinner = "Sorry better luck next time! Commputer wins.";
+            gameWinText.textContent = gameWinner;
+
+            const resetButton = document.createElement('button');
+            resetButton.textContent = "Would you like to play again?";
+            resultsDiv.appendChild(resetButton);
+            resetButton.addEventListener('click', () => {
+                location.reload();
+            })
+        }
+
         
-
     }
-    //should determine the winner after the 5 rounds based on the incrimental points from above
-    if (playerScore === computerScore) {
-        winner = "You've tied! Try again!";
-    } else if (playerScore > computerScore) {
-        winner = "You've won! I'm proud of you!";
-    } else {
-        winner = "The computer won. You'll get them next time."
-    }
-    //prints out the winner to the connsole
-    console.log(winner)
+}
+ 
 
-}  
 
-//needed to actually run the game function
-game()
+game();
